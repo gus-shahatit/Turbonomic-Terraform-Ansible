@@ -1,11 +1,3 @@
-# Configure the AWS provider
-# Replace 'us-east-1' with your desired region
-provider "aws" {
-  region = "us-east-1"
-}
-
-# Configure the AAP provider
-# Replace with your AAP instance details
 terraform {
   required_version = "~> v1.14.0"
   required_providers {
@@ -17,6 +9,10 @@ terraform {
       source = "ansible/aap"
       version = "1.4.0-devpreview1"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
   }
 }
 
@@ -27,11 +23,17 @@ provider "turbonomic" {
   skipverify = true
 }
 
+# Configure the AAP provider
+# Replace with your AAP instance details
 provider "aap" {
   host     = var.aap_host
   insecure_skip_verify = true
   username = var.aap_username
   password = var.aap_password
+}
+
+provider "aws" {
+  region = "us-east-1"
 }
 
 # Variable to store the public key for the EC2 instance
@@ -76,7 +78,7 @@ variable "turbo_password" {
 }
 
 variable "turbo_hostname" {
-  description = "The hostname for the AAP instance"
+  description = "The hostname for the Turbonomic instance"
   type        = string
   sensitive   = false
 }
