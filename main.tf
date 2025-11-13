@@ -177,7 +177,7 @@ output "web_server_public_ip" {
 check "turbonomic_consistent_with_recommendation_check" {
   assert {
     # Reference the correct resource name
-    condition = aws_instance.terraform-demo-ec2.instance_type == coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.terraform-demo-ec2.instance_type)
-    error_message = "Must use the latest recommended instance type, ${coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.terraform-demo-ec2.instance_type)}"
+    condition = aws_instance.web_server.instance_type == coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.web_server.instance_type)
+    error_message = "Must use the latest recommended instance type, ${coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.web_server.instance_type)}"
   }
 }
