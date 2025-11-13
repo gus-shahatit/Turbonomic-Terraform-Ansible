@@ -33,8 +33,6 @@ provider "aap" {
 
 provider "aws" {
   region = "us-east-2"
-  access_key = "AKIAT5HIGRFDOALZAEGG"
-  secret_key = "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"
 }
 
 # Variable to store the public key for the EC2 instance
