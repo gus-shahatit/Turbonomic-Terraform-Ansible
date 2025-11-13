@@ -1,17 +1,16 @@
 terraform {
-  required_version = "~> v1.14.0"
   required_providers {
     turbonomic = { 
       source  = "IBM/turbonomic" 
-      version = "1.2.0"
-    }
-    aap = {
-      source = "ansible/aap"
-      version = "1.4.0-devpreview1"
+      version = "1.7.0"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0.0"
+    }
+    aap = {
+      source = "ansible/aap"
+      version = "~> 1.3"
     }
   }
 }
@@ -33,7 +32,9 @@ provider "aap" {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
+  access_key = "AKIAT5HIGRFDOALZAEGG"
+  secret_key = "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"
 }
 
 # Variable to store the public key for the EC2 instance
@@ -86,12 +87,12 @@ variable "turbo_hostname" {
 data "turbonomic_cloud_entity_recommendation" "example" {
   entity_name  = "exampleVirtualMachine"
   entity_type  = "VirtualMachine"
-  default_size = "t2.small"
+  default_size = "t3.micro"
 }
 
 # 1. Provision the AWS EC2 instance
 resource "aws_instance" "web_server" {
-  ami           = "ami-0a7d80731ae1b2435" # Ubuntu Server 22.04 LTS (HVM)
+  ami           = "ami-0a627a85fdcfabbaa" # Ubuntu Server 22.04 LTS (HVM)
   instance_type = data.turbonomic_cloud_entity_recommendation.example.new_instance_type
   key_name      = var.ssh_key_name
   vpc_security_group_ids = [aws_security_group.allow_http_ssh.id]
@@ -135,7 +136,7 @@ resource "aws_security_group" "allow_http_ssh" {
 
 # Create a dynamic inventory in AAP
 resource "aap_inventory" "dynamic_inventory" {
-  name        = "TF Turbo AAP Inventory"
+  name        = "TF AAP Inventory"
   description = "Inventory for hosts provisioned by Terraform"
 }
 
@@ -176,7 +177,7 @@ output "web_server_public_ip" {
 check "turbonomic_consistent_with_recommendation_check" {
   assert {
     # Reference the correct resource name
-    condition = aws_instance.web_server.instance_type == coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.web_server.instance_type)
-    error_message = "Must use the latest recommended instance type, ${coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.web_server.instance_type)}"
+    condition = aws_instance.terraform-demo-ec2.instance_type == coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.terraform-demo-ec2.instance_type)
+    error_message = "Must use the latest recommended instance type, ${coalesce(data.turbonomic_cloud_entity_recommendation.example.new_instance_type, aws_instance.terraform-demo-ec2.instance_type)}"
   }
 }
