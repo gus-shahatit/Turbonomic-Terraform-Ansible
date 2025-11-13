@@ -135,7 +135,7 @@ resource "aws_security_group" "allow_http_ssh" {
 
 # Create a dynamic inventory in AAP
 resource "aap_inventory" "dynamic_inventory" {
-  name        = "TF AAP Inventory"
+  name        = "TF Turbo AAP Inventory"
   description = "Inventory for hosts provisioned by Terraform"
 }
 
