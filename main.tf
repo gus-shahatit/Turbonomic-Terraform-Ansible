@@ -86,7 +86,7 @@ variable "turbo_hostname" {
 data "turbonomic_cloud_entity_recommendation" "example" {
   entity_name  = "exampleVirtualMachine"
   entity_type  = "VirtualMachine"
-  default_size = "t3.nano"
+  default_size = "t2.small"
 }
 
 # 1. Provision the AWS EC2 instance
